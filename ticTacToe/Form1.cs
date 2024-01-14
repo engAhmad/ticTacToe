@@ -5,7 +5,9 @@ namespace ticTacToe
 {
     public partial class Form1 : Form
     {
-        bool turn = true; // true X turn , false Y turn ;
+        // **تخزن لاعب الدور الحالي (true لـ X ، false لـ O)**
+        bool turn = true;
+        // **يحسب عدد الدورات التي تم اتخاذها**
         int turn_count = 0;
 
         public Form1()
@@ -15,32 +17,42 @@ namespace ticTacToe
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("By Eng.Ahmad Tarawneh", "About Tic Tac Toe Game");
+            // **يعرض معلومات حول اللعبة**
+            MessageBox.Show("من تصميم المهندس أحمد الطراونه", "  لعبة أكس او");
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // **يغلق التطبيق**
             Application.Exit();
         }
 
         private void button_click(object sender, EventArgs e)
         {
-            Button b = (Button)sender;
+            // **يتعامل مع نقر الزر على لوحة اللعبة**
+            Button b = (Button)sender;  // يحول المرسل إلى كائن Button
+
             if (turn)
-                b.Text = "X";
+            {
+                b.Text = "X";  // يضع نص الزر على "X" إذا كان دور X
+            }
             else
-                b.Text = "O";
-            turn = !turn;
-            b.Enabled = false;
-            turn_count++;
-            checkForWinner();
+            {
+                b.Text = "O";  // يضع نص الزر على "O" إذا كان دور O
+            }
+
+            turn = !turn;  // يغير الدور
+            b.Enabled = false;  // يعطل الزر الذي تم النقر عليه
+            turn_count++;  // يزيد عدد الدورات
+
+            checkForWinner();  // يتحقق مما إذا كان هناك فائز بعد الحركة
         }
 
         private void checkForWinner()
         {
             bool there_is_a_winner = false;
 
-            // Horizontal  check 
+            // **يتحقق من الفوز الأفقي**
             if ((A1.Text == A2.Text) && (A2.Text == A3.Text) && (!A1.Enabled))
                 there_is_a_winner = true;
             else if ((B1.Text == B2.Text) && (B2.Text == B3.Text) && (!B1.Enabled))
@@ -48,7 +60,7 @@ namespace ticTacToe
             else if ((C1.Text == C2.Text) && (C2.Text == C3.Text) && (!C1.Enabled))
                 there_is_a_winner = true;
 
-            // Vertical  check 
+            // **يتحقق من الفوز الرأسي**
             else if ((A1.Text == B1.Text) && (B1.Text == C1.Text) && (!A1.Enabled))
                 there_is_a_winner = true;
             else if ((A2.Text == B2.Text) && (B2.Text == C2.Text) && (!A2.Enabled))
@@ -56,7 +68,7 @@ namespace ticTacToe
             else if ((A3.Text == B3.Text) && (B3.Text == C3.Text) && (!A3.Enabled))
                 there_is_a_winner = true;
 
-            // Diagonal  check 
+            // **يتحقق من الفوز القطري**
             else if ((A1.Text == B2.Text) && (B2.Text == C3.Text) && (!A1.Enabled))
                 there_is_a_winner = true;
             else if ((A3.Text == B2.Text) && (B2.Text == C1.Text) && (!C1.Enabled))
@@ -64,50 +76,48 @@ namespace ticTacToe
 
             if (there_is_a_winner)
             {
+                // **يعطل جميع الأزرار إذا كان هناك فائز**
                 disableButtons();
-                string winner = "";
-                if (turn)
-                    winner = "O";
-                else
-                    winner = "X";
-                MessageBox.Show(winner + " Wins", "wow");
+                string winner = turn ? "O" : "X";  // يحدد الفائز
+                MessageBox.Show(winner + " يفوز", "رائع");  // يعرض الفائز
             }
-            else
+            else if (turn_count == 9)
             {
-                if (turn_count == 9)
-                    MessageBox.Show("Draw", "Draw");
+                // **يعرض رسالة تعادل إذا تم ملء جميع المساحات**
+                MessageBox.Show("تعادل", "تعادل");
             }
-
         }
 
+        // **يعطل جميع الأزرار الموجودة على النموذج**
         private void disableButtons()
         {
             try
             {
                 foreach (Control c in Controls)
                 {
-                    Button b = (Button)c;
-                    b.Enabled = false;
+                    Button b = (Button)c;  // يحول التحكم إلى كائن Button
+                    b.Enabled = false;    // يعطل الزر
                 }
             }
-            catch { }
+            catch { }  // يمسك أي استثناءات قد تحدث أثناء تعطيل الأزرار
         }
 
+        // **يبدأ لعبة جديدة**
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            turn = true;
-            turn_count = 0;
+            turn = true;          // يعيد تعيين الدور إلى X
+            turn_count = 0;      // يعيد تعيين عدد الدورات إلى 0
+
             try
             {
                 foreach (Control c in Controls)
                 {
-                    Button b = (Button)c;
-                    b.Enabled = true;
-                    b.Text = "";
+                    Button b = (Button)c;  // يحول التحكم إلى كائن Button
+                    b.Enabled = true;     // يمكّن الزر
+                    b.Text = "";         // يزيل النص من الزر
                 }
             }
-            catch { }
-
+            catch { }  // يمسك أي استثناءات قد تحدث أثناء تمكين الأزرار
         }
     }
 }
